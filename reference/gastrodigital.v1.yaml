@@ -6,7 +6,7 @@ info:
     name: mes.mo GmbH
     url: 'http://www.gastroguide.de/contact'
     email: pollak@mesmo.org
-  description: ''
+  description: sasas
 servers:
   - url: 'https://kunden.gastro.digital/api/1.0'
 paths:
