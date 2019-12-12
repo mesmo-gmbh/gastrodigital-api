@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Gastro.digital API
+  version: '1.0'
+  contact:
+    name: mes.mo GmbH
+    url: 'http://www.gastroguide.de/contact'
+    email: pollak@mesmo.org
+  description: ''
+servers:
+  - url: 'https://kunden.gastro.digital/api/1.0'
+paths:
+  /reservations/status:
+    put:
+      summary: Change reservation status
+      operationId: put-reservations-status
+      responses:
+        '200':
+          description: OK
+      description: Change the status of a reservation
+      security:
+        - API Key - 1: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                  description: ID of the reservation to change
+                status:
+                  type: string
+                  description: New status of reservation
+  /reservations:
+    post:
+      summary: Add new reservation
+      operationId: post-reservations
+      responses:
+        '200':
+          description: OK
+      description: 'Create a new reservation or walk-in. To create a walk-in, ignore the guestData property.'
+      security:
+        - API Key - 1: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  description: Date of the reservation
+                time:
+                  type: string
+                  description: Time of the reservation
+                stayTime:
+                  type: number
+                  description: The staytime of the guest in minutes
+                tables:
+                  type: string
+                  description: Comma separated list of table ids
+                notes:
+                  type: string
+                  description: Additional notes
+                status:
+                  description: Status of the reservation
+                  type: string
+              required:
+                - date
+                - time
+            examples: {}
+  '/reservations/table/{Table Name}':
+    get:
+      summary: Get current reservations of table
+      tags: []
+      responses: {}
+      operationId: get-reservations-table
+      description: Get all reservations which are reserved for 30 minutes ago (from the current date) until the end of the day for the selected table
+      security:
+        - API Key - 1: []
+      requestBody: {}
+    parameters:
+      - schema:
+          type: string
+        name: Table Name
+        in: path
+        description: The name of the table. Must match table name in GastroDigital system
+        required: true
+  /reservations/find:
+    parameters: []
+    post:
+      summary: Get reservations of date/daterange
+      operationId: post-reservations-find
+      responses:
+        '200':
+          description: OK
+      description: 'Retrieve all reservations from a specific day or date range. Pass only "start" if you want to get reservations from one day only or "start" and "end" to get all reservations withing that timerange.'
+      security:
+        - API Key - 1: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startDate:
+                  type: string
+                  description: The start date for reservations to look for
+                endDate:
+                  type: string
+                  description: 'If no endDate is passed, it will only get reservations from the startDate'
+              required:
+                - startDate
+        description: ''
+components:
+  schemas: {}
+  securitySchemes:
+    API Key - 1:
+      type: http
+      scheme: Basic
+      description: Der API Key von dem Betrieb. Erhalten Sie über die Gastro.Digital Oberfläche
