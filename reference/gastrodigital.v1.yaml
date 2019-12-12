@@ -85,7 +85,6 @@ paths:
           type: string
         name: Table Name
         in: path
-        description: The name of the table. Must match table name in GastroDigital system
         required: true
   /reservations/find:
     parameters: []
